@@ -1,0 +1,29 @@
+```json
+[
+  {
+    "name": "monthly_payment_summary",
+    "description": "Calculates the total number of payments and the total amount paid, grouped by the month and year of the payment charge date.",
+    "sql": "SELECT DATE_FORMAT(charge_date, '%Y-%m') AS payment_month, COUNT(id) AS total_payments, SUM(amount) AS total_amount FROM payments GROUP BY payment_month ORDER BY payment_month;"
+  },
+  {
+    "name": "active_entities_summary",
+    "description": "Counts the total number of unique mandates and organisations that have received at least one payment.",
+    "sql": "SELECT COUNT(DISTINCT p.mandate_id) AS total_mandates_with_payments, COUNT(DISTINCT m.organisation_id) AS total_organisations_with_payments FROM payments p JOIN mandates m ON p.mandate_id = m.id;"
+  },
+  {
+    "name": "mandate_payment_efficiency",
+    "description": "Computes the average amount for individual payments and the overall average number of payments associated with each mandate.",
+    "sql": "SELECT AVG(p.amount) AS average_payment_amount_per_transaction, COUNT(p.id) / COUNT(DISTINCT m.id) AS average_payments_per_mandate_globally FROM mandates m LEFT JOIN payments p ON m.id = p.mandate_id;"
+  },
+  {
+    "name": "top_organisations_by_payment_value",
+    "description": "Identifies the top 10 organisations by total payment amount, showing their parent vertical and the sum of payments.",
+    "sql": "SELECT o.id AS organisation_id, o.parent_vertical, SUM(p.amount) AS total_payment_amount FROM organisations o JOIN mandates m ON o.id = m.organisation_id JOIN payments p ON m.id = p.mandate_id GROUP BY o.id, o.parent_vertical ORDER BY total_payment_amount DESC LIMIT 10;"
+  },
+  {
+    "name": "monthly_mandate_creation_by_scheme",
+    "description": "Tracks the number of new mandates created each month, broken down by payment scheme.",
+    "sql": "SELECT DATE_FORMAT(created_at, '%Y-%m') AS creation_month, scheme, COUNT(id) AS total_new_mandates FROM mandates GROUP BY creation_month, scheme ORDER BY creation_month, total_new_mandates DESC;"
+  }
+]
+```

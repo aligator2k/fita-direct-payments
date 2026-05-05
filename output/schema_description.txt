@@ -1,0 +1,26 @@
+DATABASE: direct_payments
+
+TABLE: mandates (rows~9216)
+  - id (varchar(50)) NULL=YES
+  - created_at (datetime) NULL=YES
+  - scheme (varchar(50)) NULL=YES
+  - organisation_id (varchar(50)) NULL=YES
+
+TABLE: organisations (rows~431)
+  - id (varchar(50)) NULL=YES
+  - created_at (datetime) NULL=YES
+  - parent_vertical (varchar(50)) NULL=YES
+
+TABLE: payments (rows~33348)
+  - id (varchar(50)) NULL=YES
+  - amount (double) NULL=YES
+  - currency (varchar(50)) NULL=YES
+  - created_at (datetime) NULL=YES
+  - source (varchar(50)) NULL=YES
+  - charge_date (datetime) NULL=YES
+  - mandate_id (varchar(50)) NULL=YES
+
+FOREIGN KEYS: none declared in the database
+Logical relationships inferred from column names:
+  payments.mandate_id -> mandates.id
+  mandates.organisation_id -> organisations.id

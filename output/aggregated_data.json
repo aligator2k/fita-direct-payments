@@ -1,0 +1,335 @@
+[
+  {
+    "name": "monthly_payment_summary",
+    "description": "Calculates the total number of payments and the total amount paid, grouped by the month and year of the payment charge date.",
+    "sql": "SELECT DATE_FORMAT(charge_date, '%Y-%m') AS payment_month, COUNT(id) AS total_payments, SUM(amount) AS total_amount FROM payments GROUP BY payment_month ORDER BY payment_month",
+    "rows": [
+      {
+        "payment_month": "2018-04",
+        "total_payments": 54,
+        "total_amount": 4689.48
+      },
+      {
+        "payment_month": "2018-05",
+        "total_payments": 403,
+        "total_amount": 74667.34
+      },
+      {
+        "payment_month": "2018-06",
+        "total_payments": 1271,
+        "total_amount": 185390.2500000001
+      },
+      {
+        "payment_month": "2018-07",
+        "total_payments": 2175,
+        "total_amount": 304865.6800000001
+      },
+      {
+        "payment_month": "2018-08",
+        "total_payments": 2670,
+        "total_amount": 347635.40999999945
+      },
+      {
+        "payment_month": "2018-09",
+        "total_payments": 2093,
+        "total_amount": 267553.9000000002
+      },
+      {
+        "payment_month": "2018-10",
+        "total_payments": 4699,
+        "total_amount": 545742.5200000001
+      },
+      {
+        "payment_month": "2018-11",
+        "total_payments": 4217,
+        "total_amount": 462507.3900000008
+      },
+      {
+        "payment_month": "2018-12",
+        "total_payments": 3283,
+        "total_amount": 416217.4300000004
+      },
+      {
+        "payment_month": "2019-01",
+        "total_payments": 6182,
+        "total_amount": 828858.1300000005
+      },
+      {
+        "payment_month": "2019-02",
+        "total_payments": 5110,
+        "total_amount": 647980.9799999999
+      },
+      {
+        "payment_month": "2019-03",
+        "total_payments": 1264,
+        "total_amount": 173321.36
+      },
+      {
+        "payment_month": "2019-04",
+        "total_payments": 11,
+        "total_amount": 4009.6800000000003
+      },
+      {
+        "payment_month": "2019-05",
+        "total_payments": 6,
+        "total_amount": 2974.06
+      },
+      {
+        "payment_month": "2019-06",
+        "total_payments": 3,
+        "total_amount": 2317.29
+      },
+      {
+        "payment_month": "2019-07",
+        "total_payments": 8,
+        "total_amount": 3641.25
+      },
+      {
+        "payment_month": "2019-08",
+        "total_payments": 3,
+        "total_amount": 2277.29
+      },
+      {
+        "payment_month": "2019-09",
+        "total_payments": 2,
+        "total_amount": 1420.29
+      },
+      {
+        "payment_month": "2019-10",
+        "total_payments": 2,
+        "total_amount": 1410.29
+      },
+      {
+        "payment_month": "2019-11",
+        "total_payments": 1,
+        "total_amount": 429.3
+      },
+      {
+        "payment_month": "2019-12",
+        "total_payments": 1,
+        "total_amount": 419.3
+      },
+      {
+        "payment_month": "2020-01",
+        "total_payments": 1,
+        "total_amount": 419.3
+      },
+      {
+        "payment_month": "2020-02",
+        "total_payments": 1,
+        "total_amount": 409.3
+      },
+      {
+        "payment_month": "2020-03",
+        "total_payments": 1,
+        "total_amount": 399.3
+      }
+    ]
+  },
+  {
+    "name": "active_entities_summary",
+    "description": "Counts the total number of unique mandates and organisations that have received at least one payment.",
+    "sql": "SELECT COUNT(DISTINCT p.mandate_id) AS total_mandates_with_payments, COUNT(DISTINCT m.organisation_id) AS total_organisations_with_payments FROM payments p JOIN mandates m ON p.mandate_id = m.id",
+    "rows": [
+      {
+        "total_mandates_with_payments": 8440,
+        "total_organisations_with_payments": 208
+      }
+    ]
+  },
+  {
+    "name": "mandate_payment_efficiency",
+    "description": "Computes the average amount for individual payments and the overall average number of payments associated with each mandate.",
+    "sql": "SELECT AVG(p.amount) AS average_payment_amount_per_transaction, COUNT(p.id) / COUNT(DISTINCT m.id) AS average_payments_per_mandate_globally FROM mandates m LEFT JOIN payments p ON m.id = p.mandate_id",
+    "rows": [
+      {
+        "average_payment_amount_per_transaction": 127.8968506619633,
+        "average_payments_per_mandate_globally": "3.5669"
+      }
+    ]
+  },
+  {
+    "name": "top_organisations_by_payment_value",
+    "description": "Identifies the top 10 organisations by total payment amount, showing their parent vertical and the sum of payments.",
+    "sql": "SELECT o.id AS organisation_id, o.parent_vertical, SUM(p.amount) AS total_payment_amount FROM organisations o JOIN mandates m ON o.id = m.organisation_id JOIN payments p ON m.id = p.mandate_id GROUP BY o.id, o.parent_vertical ORDER BY total_payment_amount DESC LIMIT 10",
+    "rows": [
+      {
+        "organisation_id": "cb4fb7740bf646859948bed49d594b08",
+        "parent_vertical": "healthcare",
+        "total_payment_amount": 305346.57000000024
+      },
+      {
+        "organisation_id": "6c87af1fc07f4a94aeefce69a12508df",
+        "parent_vertical": "tradesmen_and_non_professionals_services",
+        "total_payment_amount": 256616.5
+      },
+      {
+        "organisation_id": "f0ae22537c284b4ba08c5c09a0481df6",
+        "parent_vertical": "professional_and_financial_services",
+        "total_payment_amount": 236687.0
+      },
+      {
+        "organisation_id": "e00a57ec92dc42f987e59cd351ad30a8",
+        "parent_vertical": "digital_services_media_telecoms",
+        "total_payment_amount": 208954.1200000004
+      },
+      {
+        "organisation_id": "6b52bae9d36b4cf1a4dc443a277def4a",
+        "parent_vertical": "property",
+        "total_payment_amount": 172870.52
+      },
+      {
+        "organisation_id": "9e575091cf414fe0a4bb2dc764651075",
+        "parent_vertical": "digital_services_media_telecoms",
+        "total_payment_amount": 168601.8000000001
+      },
+      {
+        "organisation_id": "96674fe238bd424f941bf4cb49cd5e49",
+        "parent_vertical": "societies_and_clubs",
+        "total_payment_amount": 168052.10000000038
+      },
+      {
+        "organisation_id": "05d17d8b464343858c2c10c4ecbafff4",
+        "parent_vertical": "professional_and_financial_services",
+        "total_payment_amount": 143468.6400000001
+      },
+      {
+        "organisation_id": "0c6eb9b682a94474b4bf8aebb0b06db6",
+        "parent_vertical": "professional_and_financial_services",
+        "total_payment_amount": 112164.49999999997
+      },
+      {
+        "organisation_id": "9e73d40c7b8349d8aff3f3484c0341ab",
+        "parent_vertical": "property",
+        "total_payment_amount": 90673.42999999986
+      }
+    ]
+  },
+  {
+    "name": "monthly_mandate_creation_by_scheme",
+    "description": "Tracks the number of new mandates created each month, broken down by payment scheme.",
+    "sql": "SELECT DATE_FORMAT(created_at, '%Y-%m') AS creation_month, scheme, COUNT(id) AS total_new_mandates FROM mandates GROUP BY creation_month, scheme ORDER BY creation_month, total_new_mandates DESC",
+    "rows": [
+      {
+        "creation_month": "2018-03",
+        "scheme": "bacs",
+        "total_new_mandates": 1
+      },
+      {
+        "creation_month": "2018-04",
+        "scheme": "bacs",
+        "total_new_mandates": 112
+      },
+      {
+        "creation_month": "2018-04",
+        "scheme": "sepa_core",
+        "total_new_mandates": 2
+      },
+      {
+        "creation_month": "2018-05",
+        "scheme": "bacs",
+        "total_new_mandates": 972
+      },
+      {
+        "creation_month": "2018-05",
+        "scheme": "sepa_core",
+        "total_new_mandates": 18
+      },
+      {
+        "creation_month": "2018-06",
+        "scheme": "bacs",
+        "total_new_mandates": 1165
+      },
+      {
+        "creation_month": "2018-06",
+        "scheme": "sepa_core",
+        "total_new_mandates": 18
+      },
+      {
+        "creation_month": "2018-07",
+        "scheme": "bacs",
+        "total_new_mandates": 1106
+      },
+      {
+        "creation_month": "2018-07",
+        "scheme": "sepa_core",
+        "total_new_mandates": 34
+      },
+      {
+        "creation_month": "2018-08",
+        "scheme": "bacs",
+        "total_new_mandates": 809
+      },
+      {
+        "creation_month": "2018-08",
+        "scheme": "sepa_core",
+        "total_new_mandates": 34
+      },
+      {
+        "creation_month": "2018-09",
+        "scheme": "bacs",
+        "total_new_mandates": 716
+      },
+      {
+        "creation_month": "2018-09",
+        "scheme": "sepa_core",
+        "total_new_mandates": 42
+      },
+      {
+        "creation_month": "2018-10",
+        "scheme": "bacs",
+        "total_new_mandates": 665
+      },
+      {
+        "creation_month": "2018-10",
+        "scheme": "sepa_core",
+        "total_new_mandates": 36
+      },
+      {
+        "creation_month": "2018-11",
+        "scheme": "bacs",
+        "total_new_mandates": 806
+      },
+      {
+        "creation_month": "2018-11",
+        "scheme": "sepa_core",
+        "total_new_mandates": 45
+      },
+      {
+        "creation_month": "2018-12",
+        "scheme": "bacs",
+        "total_new_mandates": 953
+      },
+      {
+        "creation_month": "2018-12",
+        "scheme": "sepa_core",
+        "total_new_mandates": 51
+      },
+      {
+        "creation_month": "2019-01",
+        "scheme": "bacs",
+        "total_new_mandates": 992
+      },
+      {
+        "creation_month": "2019-01",
+        "scheme": "sepa_core",
+        "total_new_mandates": 55
+      },
+      {
+        "creation_month": "2019-02",
+        "scheme": "bacs",
+        "total_new_mandates": 680
+      },
+      {
+        "creation_month": "2019-02",
+        "scheme": "sepa_core",
+        "total_new_mandates": 29
+      },
+      {
+        "creation_month": "2019-03",
+        "scheme": "bacs",
+        "total_new_mandates": 40
+      }
+    ]
+  }
+]
