@@ -1,0 +1,67 @@
+```json
+[
+  {
+    "id": "total_payments_kpi",
+    "title": "Total Payment Amount",
+    "description": "Displays the cumulative sum of all payment amounts across all time.",
+    "aggregation": "Sum of amount from payments table.",
+    "visual_type": "kpi",
+    "x_field": null,
+    "y_field": null
+  },
+  {
+    "id": "unique_organisations_kpi",
+    "title": "Number of Unique Organisations",
+    "description": "Shows the total count of distinct organisations in the database.",
+    "aggregation": "Count of distinct id from organisations table.",
+    "visual_type": "kpi",
+    "x_field": null,
+    "y_field": null
+  },
+  {
+    "id": "monthly_payment_trend",
+    "title": "Monthly Payment Amount Trend",
+    "description": "Illustrates the trend of total payment amounts aggregated by month based on charge date.",
+    "aggregation": "Monthly sum of payment amount, grouped by month of charge_date.",
+    "visual_type": "line",
+    "x_field": "Month of Charge Date",
+    "y_field": "Total Payment Amount"
+  },
+  {
+    "id": "payments_by_source",
+    "title": "Payments Breakdown by Source",
+    "description": "Compares the total payment amounts originating from different payment sources.",
+    "aggregation": "Sum of payment amount, grouped by source from payments table.",
+    "visual_type": "donut",
+    "x_field": "Payment Source",
+    "y_field": "Total Payment Amount"
+  },
+  {
+    "id": "payments_by_parent_vertical",
+    "title": "Payments by Organisation Vertical",
+    "description": "Shows the distribution of total payment amounts across different parent verticals of organisations.",
+    "aggregation": "Sum of payment amount from payments, joined through mandates to organisations, grouped by parent_vertical.",
+    "visual_type": "bar_vertical",
+    "x_field": "Organisation Vertical",
+    "y_field": "Total Payment Amount"
+  },
+  {
+    "id": "top_10_organisations",
+    "title": "Top 10 Organisations by Payment Amount",
+    "description": "Ranks the top 10 organisations based on the total payment amount they have received.",
+    "aggregation": "Top 10 sum of payment amount from payments, joined through mandates to organisations, grouped by organisation id.",
+    "visual_type": "bar_horizontal",
+    "x_field": "Organisation ID",
+    "y_field": "Total Payment Amount"
+  },
+  {
+    "id": "monthly_payments_by_scheme",
+    "title": "Monthly Payments by Scheme",
+    "description": "Illustrates the monthly trend of total payment amounts, broken down by the scheme of the associated mandate.",
+    "aggregation": "Monthly sum of payment amount from payments, joined to mandates, grouped by month of charge_date and mandate scheme.",
+    "visual_type": "stacked_bar",
+    "x_field": "Month of Charge Date",
+    "y_field": "Total Payment Amount"
+  }
+]
+```
