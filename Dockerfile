@@ -21,7 +21,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Now copy the rest of the project.
-COPY schema_extractor.py plan_generator.py report_builder.py gemini_client.py main.py ./
+COPY schema_extractor.py plan_generator.py report_builder.py gemini_client.py main.py webapp.py ./
+COPY templates ./templates
 
 # Default command: run the full pipeline.
-CMD ["python", "main.py"]
+EXPOSE 5000
+CMD ["python", "webapp.py"]

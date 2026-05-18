@@ -21,7 +21,7 @@ but there are clear logical relationships listed at the bottom.
 {schema}
 
 Produce a visualization plan for a one-page report aimed at a business
-stakeholder. The plan must contain 6 to 8 items.
+stakeholder. The plan must contain exactly {num_items} items.
 
 Each item must be a JSON object with these keys:
   "id": short snake_case identifier, unique
@@ -46,7 +46,8 @@ Return ONLY a JSON array of items. No markdown fences, no prose, no comments.
 
 
 def ask_gemini_for_plan(schema_text):
-    prompt = PROMPT_TEMPLATE.format(schema=schema_text)
+    num_items = int(os.getenv("PLAN_ITEMS", "7"))
+    prompt = PROMPT_TEMPLATE.format(schema=schema_text, num_items=num_items)
     return ask_gemini(prompt)
 
 

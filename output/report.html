@@ -24,75 +24,33 @@
 <body>
 
 <h1>Direct Payments Report</h1>
-<div class="meta">Generated 2026-05-18 12:41 from database <code>direct_payments</code>. 7 sections.</div>
+<div class="meta">Generated 2026-05-18 13:11 from database <code>direct_payments</code>. 7 sections.</div>
 
 
 <div class="item">
-  <h2>Total Payment Amount</h2>
-  <div class="description">The total value of all payments made.</div>
+  <h2>Total Processed Volume</h2>
+  <div class="description">The aggregate value of all payments processed through the platform.</div>
 
   
     <div class="kpi-value">4,279,557</div>
   
 
-  <div class="insight">The total value of all payments recorded in the system is 4,279,556.52. This single metric summarizes the cumulative financial activity processed through the payments table to date. It serves as a primary indicator of the overall scale of transaction volume handled by the platform.</div>
+  <div class="insight">The total processed volume represents the cumulative value of all payments handled by the platform since inception. As of the current data, the aggregate financial throughput has reached $4,279,556.52. This multi-million dollar figure reflects the platform's total capacity for transaction management across all payment activities recorded in the system.</div>
 
   <details>
     <summary>Show SQL and raw data</summary>
-    <pre>SELECT SUM(amount) AS total_payment_amount FROM payments</pre>
+    <pre>SELECT SUM(amount) AS total_amount FROM payments;</pre>
     <pre>[
   {
-    "total_payment_amount": 4279556.519999982
+    "total_amount": 4279556.519999982
   }
 ]</pre>
   </details>
 </div>
 
 <div class="item">
-  <h2>Total Number of Payments</h2>
-  <div class="description">The total count of all payment transactions.</div>
-
-  
-    <div class="kpi-value">33,461</div>
-  
-
-  <div class="insight">The total volume of financial activity captured in the database reflects a cumulative count of 33,461 individual payment transactions. This figure represents the aggregate number of all processed entries recorded within the payments table to date. The presence of 33,461 distinct records indicates a substantial transaction history across the platform.</div>
-
-  <details>
-    <summary>Show SQL and raw data</summary>
-    <pre>SELECT count(id) AS number_of_payments FROM payments;</pre>
-    <pre>[
-  {
-    "number_of_payments": 33461
-  }
-]</pre>
-  </details>
-</div>
-
-<div class="item">
-  <h2>Average Payment Amount</h2>
-  <div class="description">The average value of individual payment transactions.</div>
-
-  
-    <div class="kpi-value">127.90</div>
-  
-
-  <div class="insight">This indicator monitors the average value of individual payment transactions processed across the platform. The current average payment amount is approximately $127.90 per transaction, representing the central tendency of customer spending behavior. This figure serves as a key baseline for evaluating the scale of incoming revenue relative to transaction volume.</div>
-
-  <details>
-    <summary>Show SQL and raw data</summary>
-    <pre>SELECT AVG(amount) AS average_payment_amount FROM payments;</pre>
-    <pre>[
-  {
-    "average_payment_amount": 127.89685066196414
-  }
-]</pre>
-  </details>
-</div>
-
-<div class="item">
-  <h2>Monthly Payment Trend</h2>
-  <div class="description">The total payment amount over time, aggregated by month.</div>
+  <h2>Total Mandates Created</h2>
+  <div class="description">The total number of payment mandates established by customers.</div>
 
   
     <p style="color: red;"><strong>Error:</strong> All Gemini models failed or hit quota</p>
@@ -108,8 +66,8 @@
 </div>
 
 <div class="item">
-  <h2>Payment Amount by Parent Vertical</h2>
-  <div class="description">Breakdown of total payment amount by the parent vertical of the organisation.</div>
+  <h2>Monthly Payment Volume Trend</h2>
+  <div class="description">The historical trend of payment amounts processed each month.</div>
 
   
     <p style="color: red;"><strong>Error:</strong> All Gemini models failed or hit quota</p>
@@ -125,8 +83,8 @@
 </div>
 
 <div class="item">
-  <h2>Top 5 Schemes by Payment Amount</h2>
-  <div class="description">The top 5 payment schemes ranked by their total payment amount.</div>
+  <h2>Payment Volume by Industry Vertical</h2>
+  <div class="description">A breakdown of total revenue across different organization parent verticals.</div>
 
   
     <p style="color: red;"><strong>Error:</strong> All Gemini models failed or hit quota</p>
@@ -142,8 +100,42 @@
 </div>
 
 <div class="item">
-  <h2>Payment Distribution by Source</h2>
-  <div class="description">The proportion of payments originating from different sources.</div>
+  <h2>Top 10 Organisations by Volume</h2>
+  <div class="description">A ranking of the top ten organizations generating the highest payment volume.</div>
+
+  
+    <p style="color: red;"><strong>Error:</strong> All Gemini models failed or hit quota</p>
+  
+
+  
+
+  <details>
+    <summary>Show SQL and raw data</summary>
+    <pre></pre>
+    <pre></pre>
+  </details>
+</div>
+
+<div class="item">
+  <h2>Mandates by Payment Scheme</h2>
+  <div class="description">The distribution of mandate counts across different regional payment schemes.</div>
+
+  
+    <p style="color: red;"><strong>Error:</strong> All Gemini models failed or hit quota</p>
+  
+
+  
+
+  <details>
+    <summary>Show SQL and raw data</summary>
+    <pre></pre>
+    <pre></pre>
+  </details>
+</div>
+
+<div class="item">
+  <h2>Payment Source Performance</h2>
+  <div class="description">A detailed table showing volume and frequency across different payment sources.</div>
 
   
     <p style="color: red;"><strong>Error:</strong> All Gemini models failed or hit quota</p>

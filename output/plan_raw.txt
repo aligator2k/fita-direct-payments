@@ -1,65 +1,65 @@
 [
   {
-    "id": "total_payment_amount",
-    "title": "Total Payment Amount",
-    "description": "The total value of all payments made.",
-    "aggregation": "sum of amount from payments table",
+    "id": "total_processed_volume",
+    "title": "Total Processed Volume",
+    "description": "The aggregate value of all payments processed through the platform.",
+    "aggregation": "total sum of amount from payments",
     "visual_type": "kpi",
     "x_field": null,
-    "y_field": "amount"
+    "y_field": "total_amount"
   },
   {
-    "id": "number_of_payments",
-    "title": "Total Number of Payments",
-    "description": "The total count of all payment transactions.",
-    "aggregation": "count of id from payments table",
+    "id": "active_mandate_count",
+    "title": "Total Mandates Created",
+    "description": "The total number of payment mandates established by customers.",
+    "aggregation": "count of unique id from mandates",
     "visual_type": "kpi",
     "x_field": null,
-    "y_field": "id"
+    "y_field": "mandate_count"
   },
   {
-    "id": "average_payment_amount",
-    "title": "Average Payment Amount",
-    "description": "The average value of individual payment transactions.",
-    "aggregation": "average of amount from payments table",
-    "visual_type": "kpi",
-    "x_field": null,
-    "y_field": "amount"
-  },
-  {
-    "id": "monthly_payment_trend",
-    "title": "Monthly Payment Trend",
-    "description": "The total payment amount over time, aggregated by month.",
-    "aggregation": "monthly sum of amount from payments table based on charge_date",
+    "id": "monthly_volume_trend",
+    "title": "Monthly Payment Volume Trend",
+    "description": "The historical trend of payment amounts processed each month.",
+    "aggregation": "monthly total payment amount based on charge_date",
     "visual_type": "line",
-    "x_field": "charge_date",
-    "y_field": "amount"
+    "x_field": "charge_month",
+    "y_field": "total_amount"
   },
   {
-    "id": "payments_by_parent_vertical",
-    "title": "Payment Amount by Parent Vertical",
-    "description": "Breakdown of total payment amount by the parent vertical of the organisation.",
-    "aggregation": "sum of amount from payments table, joined with mandates and organisations, grouped by organisations.parent_vertical",
-    "visual_type": "bar_horizontal",
+    "id": "volume_by_vertical",
+    "title": "Payment Volume by Industry Vertical",
+    "description": "A breakdown of total revenue across different organization parent verticals.",
+    "aggregation": "sum of payment amount grouped by parent_vertical",
+    "visual_type": "donut",
     "x_field": "parent_vertical",
-    "y_field": "amount"
+    "y_field": "total_amount"
   },
   {
-    "id": "top_5_schemes_by_payment",
-    "title": "Top 5 Schemes by Payment Amount",
-    "description": "The top 5 payment schemes ranked by their total payment amount.",
-    "aggregation": "sum of amount from payments table, joined with mandates, grouped by mandates.scheme, ordered by sum of amount descending, limited to 5",
+    "id": "top_organisations_ranking",
+    "title": "Top 10 Organisations by Volume",
+    "description": "A ranking of the top ten organizations generating the highest payment volume.",
+    "aggregation": "top 10 organisations by total payment amount",
+    "visual_type": "bar_horizontal",
+    "x_field": "total_amount",
+    "y_field": "organisation_id"
+  },
+  {
+    "id": "mandate_scheme_split",
+    "title": "Mandates by Payment Scheme",
+    "description": "The distribution of mandate counts across different regional payment schemes.",
+    "aggregation": "count of mandates grouped by scheme",
     "visual_type": "bar_vertical",
     "x_field": "scheme",
-    "y_field": "amount"
+    "y_field": "mandate_count"
   },
   {
-    "id": "payments_by_source",
-    "title": "Payment Distribution by Source",
-    "description": "The proportion of payments originating from different sources.",
-    "aggregation": "count of id from payments table, grouped by payments.source",
-    "visual_type": "donut",
+    "id": "source_channel_analysis",
+    "title": "Payment Source Performance",
+    "description": "A detailed table showing volume and frequency across different payment sources.",
+    "aggregation": "total amount and count of payments grouped by source",
+    "visual_type": "table",
     "x_field": "source",
-    "y_field": "id"
+    "y_field": "total_amount"
   }
 ]

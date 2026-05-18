@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Direct Payments Pipeline</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    h1 { border-bottom: 2px solid #4C9AFF; padding-bottom: 0.4rem; }
+    form { background: #f4f4f8; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center; }
+    button { background: #4C9AFF; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-size: 1rem; cursor: pointer; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    input[type="number"] { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; width: 80px; }
+    .status { padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; background: #f0f4f8; }
+    .status.running { background: #fff8dc; }
+    .status.error { background: #ffe5e5; color: #a00; }
+    .logs { background: #1e1e1e; color: #e0e0e0; padding: 1rem; border-radius: 4px; height: 400px; overflow-y: auto; font-family: Consolas, Monaco, monospace; font-size: 0.85rem; white-space: pre-wrap; }
+    .report-link { display: inline-block; background: #2c5282; color: white; padding: 0.6rem 1.2rem; border-radius: 4px; text-decoration: none; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+<h1>Direct Payments Pipeline</h1>
+
+<form id="runForm">
+  <label for="num_items">Plan items:</label>
+  <input type="number" id="num_items" name="num_items" min="3" max="10" value="7">
+  <button type="submit" id="runBtn">Run pipeline</button>
+</form>
+
+<div id="status" class="status">Loading...</div>
+
+<h2>Logs</h2>
+<div id="logs" class="logs">No logs yet.</div>
+
+<div id="reportLinkWrap"></div>
+
+<script>
+function fmt(s) { return s || "—"; }
+
+async function refreshStatus() {
+  try {
+    const r = await fetch("/status");
+    const s = await r.json();
+    const statusDiv = document.getElementById("status");
+    const runBtn = document.getElementById("runBtn");
+    let cls = "status";
+    let text = "";
+    if (s.running) {
+      cls += " running";
+      text = `Running... started at ${fmt(s.last_started)}`;
+      runBtn.disabled = true;
+    } else if (s.last_error) {
+      cls += " error";
+      text = `Last run failed: ${s.last_error}`;
+      runBtn.disabled = false;
+    } else if (s.last_finished) {
+      text = `Idle. Last run finished at ${fmt(s.last_finished)}`;
+      runBtn.disabled = false;
+    } else {
+      text = "Idle. No runs yet.";
+      runBtn.disabled = false;
+    }
+    statusDiv.className = cls;
+    statusDiv.textContent = text;
+
+    const wrap = document.getElementById("reportLinkWrap");
+    if (s.has_report) {
+      wrap.innerHTML = '<a class="report-link" href="/report" target="_blank">Open latest report</a>';
+    } else {
+      wrap.innerHTML = "";
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function refreshLogs() {
+  try {
+    const r = await fetch("/logs");
+    const text = await r.text();
+    const div = document.getElementById("logs");
+    const wasAtBottom = div.scrollTop + div.clientHeight >= div.scrollHeight - 20;
+    div.textContent = text || "No logs yet.";
+    if (wasAtBottom) div.scrollTop = div.scrollHeight;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+document.getElementById("runForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const num_items = document.getElementById("num_items").value;
+  const r = await fetch("/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `num_items=${encodeURIComponent(num_items)}`
+  });
+  if (!r.ok) {
+    const data = await r.json().catch(() => ({}));
+    alert(data.error || "Failed to start");
+  }
+  refreshStatus();
+  refreshLogs();
+});
+
+refreshStatus();
+refreshLogs();
+setInterval(refreshStatus, 2000);
+setInterval(refreshLogs, 2000);
+</script>
+
+</body>
+</html>
