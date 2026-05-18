@@ -9,6 +9,7 @@ import os
 import json
 import re
 from dotenv import load_dotenv
+load_dotenv()
 from gemini_client import ask_gemini
 from schema_extractor import build_schema_description
 
