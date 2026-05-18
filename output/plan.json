@@ -1,65 +1,65 @@
 [
   {
-    "id": "total_payments_kpi",
+    "id": "total_payment_amount",
     "title": "Total Payment Amount",
-    "description": "Displays the cumulative sum of all payment amounts across all time.",
-    "aggregation": "Sum of amount from payments table.",
+    "description": "The total value of all payments made.",
+    "aggregation": "sum of amount from payments table",
     "visual_type": "kpi",
     "x_field": null,
-    "y_field": null
+    "y_field": "amount"
   },
   {
-    "id": "unique_organisations_kpi",
-    "title": "Number of Unique Organisations",
-    "description": "Shows the total count of distinct organisations in the database.",
-    "aggregation": "Count of distinct id from organisations table.",
+    "id": "number_of_payments",
+    "title": "Total Number of Payments",
+    "description": "The total count of all payment transactions.",
+    "aggregation": "count of id from payments table",
     "visual_type": "kpi",
     "x_field": null,
-    "y_field": null
+    "y_field": "id"
+  },
+  {
+    "id": "average_payment_amount",
+    "title": "Average Payment Amount",
+    "description": "The average value of individual payment transactions.",
+    "aggregation": "average of amount from payments table",
+    "visual_type": "kpi",
+    "x_field": null,
+    "y_field": "amount"
   },
   {
     "id": "monthly_payment_trend",
-    "title": "Monthly Payment Amount Trend",
-    "description": "Illustrates the trend of total payment amounts aggregated by month based on charge date.",
-    "aggregation": "Monthly sum of payment amount, grouped by month of charge_date.",
+    "title": "Monthly Payment Trend",
+    "description": "The total payment amount over time, aggregated by month.",
+    "aggregation": "monthly sum of amount from payments table based on charge_date",
     "visual_type": "line",
-    "x_field": "Month of Charge Date",
-    "y_field": "Total Payment Amount"
-  },
-  {
-    "id": "payments_by_source",
-    "title": "Payments Breakdown by Source",
-    "description": "Compares the total payment amounts originating from different payment sources.",
-    "aggregation": "Sum of payment amount, grouped by source from payments table.",
-    "visual_type": "donut",
-    "x_field": "Payment Source",
-    "y_field": "Total Payment Amount"
+    "x_field": "charge_date",
+    "y_field": "amount"
   },
   {
     "id": "payments_by_parent_vertical",
-    "title": "Payments by Organisation Vertical",
-    "description": "Shows the distribution of total payment amounts across different parent verticals of organisations.",
-    "aggregation": "Sum of payment amount from payments, joined through mandates to organisations, grouped by parent_vertical.",
-    "visual_type": "bar_vertical",
-    "x_field": "Organisation Vertical",
-    "y_field": "Total Payment Amount"
-  },
-  {
-    "id": "top_10_organisations",
-    "title": "Top 10 Organisations by Payment Amount",
-    "description": "Ranks the top 10 organisations based on the total payment amount they have received.",
-    "aggregation": "Top 10 sum of payment amount from payments, joined through mandates to organisations, grouped by organisation id.",
+    "title": "Payment Amount by Parent Vertical",
+    "description": "Breakdown of total payment amount by the parent vertical of the organisation.",
+    "aggregation": "sum of amount from payments table, joined with mandates and organisations, grouped by organisations.parent_vertical",
     "visual_type": "bar_horizontal",
-    "x_field": "Organisation ID",
-    "y_field": "Total Payment Amount"
+    "x_field": "parent_vertical",
+    "y_field": "amount"
   },
   {
-    "id": "monthly_payments_by_scheme",
-    "title": "Monthly Payments by Scheme",
-    "description": "Illustrates the monthly trend of total payment amounts, broken down by the scheme of the associated mandate.",
-    "aggregation": "Monthly sum of payment amount from payments, joined to mandates, grouped by month of charge_date and mandate scheme.",
-    "visual_type": "stacked_bar",
-    "x_field": "Month of Charge Date",
-    "y_field": "Total Payment Amount"
+    "id": "top_5_schemes_by_payment",
+    "title": "Top 5 Schemes by Payment Amount",
+    "description": "The top 5 payment schemes ranked by their total payment amount.",
+    "aggregation": "sum of amount from payments table, joined with mandates, grouped by mandates.scheme, ordered by sum of amount descending, limited to 5",
+    "visual_type": "bar_vertical",
+    "x_field": "scheme",
+    "y_field": "amount"
+  },
+  {
+    "id": "payments_by_source",
+    "title": "Payment Distribution by Source",
+    "description": "The proportion of payments originating from different sources.",
+    "aggregation": "count of id from payments table, grouped by payments.source",
+    "visual_type": "donut",
+    "x_field": "source",
+    "y_field": "id"
   }
 ]

@@ -16,24 +16,16 @@ import io
 import json
 import re
 import base64
+from jinja2 import Template
 from datetime import datetime
-import time
 from dotenv import load_dotenv
 import mysql.connector
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import google.generativeai as genai
-from jinja2 import Template
-
+from gemini_client import ask_gemini
 from schema_extractor import build_schema_description
-
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-MODEL = genai.GenerativeModel("gemini-2.5-flash")
-
 
 # ---------- DB helpers ----------
 
@@ -123,23 +115,8 @@ Rules:
 """
 
 
-def gemini_call(prompt, retries=3):
-    """Call Gemini with simple retry on rate-limit errors."""
-    for attempt in range(retries):
-        try:
-            response = MODEL.generate_content(prompt)
-            time.sleep(13)  # stay under 5 req/min for the free tier
-            return response.text
-        except Exception as e:
-            msg = str(e)
-            if "429" in msg or "quota" in msg.lower():
-                wait = 30 * (attempt + 1)
-                print(f"    rate-limited, waiting {wait}s...")
-                time.sleep(wait)
-                continue
-            raise
-    raise RuntimeError("Gemini call failed after retries")
-
+def gemini_call(prompt):
+    return ask_gemini(prompt)
 
 def ask_for_sql(schema_text, item):
     prompt = SQL_PROMPT.format(schema=schema_text, item=json.dumps(item, indent=2))

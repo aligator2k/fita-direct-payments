@@ -9,12 +9,8 @@ import os
 import json
 import re
 from dotenv import load_dotenv
-import google.generativeai as genai
-
+from gemini_client import ask_gemini
 from schema_extractor import build_schema_description
-
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 
 PROMPT_TEMPLATE = """You are a data analytics expert. Below is the schema of
@@ -49,10 +45,8 @@ Return ONLY a JSON array of items. No markdown fences, no prose, no comments.
 
 
 def ask_gemini_for_plan(schema_text):
-    model = genai.GenerativeModel("gemini-2.5-flash")
     prompt = PROMPT_TEMPLATE.format(schema=schema_text)
-    response = model.generate_content(prompt)
-    return response.text
+    return ask_gemini(prompt)
 
 
 def extract_json(raw_text):

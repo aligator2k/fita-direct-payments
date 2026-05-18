@@ -1,84 +1,66 @@
-# fita-direct-payments
+# Fita Direct Payments
 
-MySQL + Gemini schema analysis
+Pipeline that connects to a MySQL database, asks Google Gemini for SQL queries and insights, runs them, and produces an HTML report.
 
+## Run with Docker (recommended)
 
+Prerequisites: Docker Desktop installed and running.
 
-\# Fita Direct Payments
-
-
-
-Python project that connects to a MySQL database, sends its schema to Google Gemini, and uses the LLM to generate SQL queries and written insights.
-
-
-
-\## Overview
-
-
-
-Three scripts, run in order:
-
-
-
-1\. `schema\_extractor.py` connects to MySQL, pulls table and column metadata from `information\_schema`, builds a structured text description, and saves it to `output/schema\_description.txt`.
-
-2\. `query\_generator.py` sends that schema to Gemini, asks for 5 aggregated KPI queries as JSON, runs each query against MySQL, and saves the results to `output/aggregated\_data.json`.
-
-3\. `insights\_generator.py` sends the schema plus aggregated data back to Gemini, asks for a written analysis, and saves it to `output/insights\_report.md`.
-
-
-
-\## Setup
-
-
+1. Copy `.env.example` to `.env` and fill in your values.
+2. Build and run:
 
 ```bash
-
-python -m venv .venv
-
-.\\.venv\\Scripts\\Activate.ps1
-
-pip install -r requirements.txt
-
+docker compose up --build
 ```
 
+The container builds, runs the pipeline, and exits. Output files appear in `./output/`. Open `output/report.html` in a browser.
 
+## Run locally with Python
 
-Create a `.env` file in the project root with the following keys:
+Prerequisites: Python 3.12 or later.
 
-GEMINI\_API\_KEY=your\_key\_here
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+cp .env.example .env  # then edit .env
+python main.py
+```
 
-DB\_HOST=...
+## Configuration
 
-DB\_PORT=3306
+All settings live in `.env`. Required keys:
 
-DB\_USER=...
-
-DB\_PASSWORD=...
-
-DB\_NAME=...
-
-
+GEMINI_API_KEY=your_key_here
+DB_HOST=...
+DB_PORT=3306
+DB_USER=...
+DB_PASSWORD=...
+DB_NAME=…
 
 Get a free Gemini API key at https://aistudio.google.com/app/apikey
 
+## What it does
 
+1. `schema_extractor.py` connects to MySQL, reads `information_schema`, builds a structured text description
+2. `plan_generator.py` sends the schema to Gemini, gets back a JSON plan of 6-8 visualizations
+3. `report_builder.py` for each plan item: asks Gemini for SQL, runs it, renders a matplotlib chart, asks Gemini for insights, combines everything into one HTML file
+4. `main.py` orchestrates all three with logging
 
-\## Run
+Outputs land in `./output/`:
+- `report.html` — final report
+- `pipeline.log` — full run log
+- `plan.json` — the plan Gemini produced
+- `schema_description.txt` — extracted schema
+- `aggregated_data.json`, `plan_raw.txt` — intermediates
 
+## Models used
 
+The Gemini client (`gemini_client.py`) tries multiple models in order, falling back to the next when one hits the free-tier rate limit:
 
-```bash
+- gemini-2.5-flash
+- gemini-2.0-flash
+- gemini-2.5-flash-lite
+- gemini-flash-latest
 
-python schema\_extractor.py
-
-python query\_generator.py
-
-python insights\_generator.py
-
-```
-
-
-
-Outputs land in the `output/` folder.
-
+Module-level state remembers which one worked last so subsequent calls skip ahead.

@@ -1,0 +1,10 @@
+services:
+  pipeline:
+    build: .
+    image: fita-direct-payments:latest
+    container_name: fita-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ./output:/app/output
+    restart: "no"
